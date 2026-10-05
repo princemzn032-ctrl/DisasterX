@@ -85,6 +85,16 @@ Add competition/demo screenshots here:
 
 Incident reports accept `multipart/form-data` with optional `images` (up to four images, 8 MB each). Realtime Socket.IO events include `disaster:new`, `disaster:updated`, `sos:new`, and `sos:updated`.
 
+## Deploy to Vercel and Render
+
+The frontend is deployed on Vercel and the Express API on Render. MongoDB Atlas (or another hosted MongoDB deployment) is required; the local MongoDB fallback is disabled in production.
+
+1. Create a Render web service from this repository using the root `render.yaml`. Set `MONGO_URI` to the hosted MongoDB connection string and `CLIENT_URL` to the Vercel site origin (for example, `https://disasterx.vercel.app`). Render generates `JWT_SECRET`.
+2. In Vercel, import this repository with the project root set to `frontend`. Use `npm run build` as the build command and `dist` as the output directory. Set `VITE_API_URL` to the Render API URL ending in `/api` (for example, `https://disasterx-api.onrender.com/api`), then deploy.
+3. Update Render's `CLIENT_URL` to the final Vercel domain and redeploy the API if necessary.
+
+The free Render service uses ephemeral local storage. Uploaded report photos may be lost when the service restarts or redeploys; use persistent media storage before relying on uploads in production. The free service may also sleep when idle.
+
 ## Notes
 
 The browser must grant location access before it can send an SOS. Demo administrators are created only by the seed script; public registration cannot grant admin privileges. Uploaded evidence is stored in `backend/uploads` and served through `/uploads`.
